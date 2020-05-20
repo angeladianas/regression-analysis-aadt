@@ -1,0 +1,638 @@
+\documentclass[english]{article}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{listings}
+\usepackage{subcaption}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+\lstset{
+    literate={~} {$\sim$}{1}
+}
+\newcommand{\LaTeXs}{\LaTeX{\/} }
+\newcommand{\matlabs}{{\sc Matlab{\/} }}
+\newcommand{\matlab}{{\sc Matlab}}
+ 
+\begin{document}
+
+\tableofcontents
+
+\title{MH3510 Regression Analysis Assignment}
+
+\author{
+  Diana (U1740430C)
+}
+
+\maketitle
+
+\begin{abstract}
+  This assignment is about traffic monitoring for a section of road or highway. We are interested to predict the average annual daily traffic (aadt) for a section of road or highway by using linear regression. It is defined as the average, over a year, of the number of vehicles that pass through a particular section of a road each day.
+\end{abstract}
+
+\section{Graphical Representation}\label{introduction}
+We use four predictor variables to predict the response variable (aadt). The variables are as follows: \\ \\
+$X_1$: population of county in which road section is located--the second column of data \\ 
+$X_2$: number of lanes in road section-- the third  column of data \\
+$X_3$: width of road section (in feet)-the fourth column of data \\
+Control (X4): two-category quality variable indicating whether or not there is control of access to road section (1=access control; 2=no access control). \\ \\
+We plot the response variable and its predictor variables in a scatter plot matrix below (Figure \ref{figure1}). In figure \ref{figure1}, aadt refers to the annual daily traffic or $Y$, population refers to $X_1$, num\_of\_lanes refers to the number of lanes or $X
+_2$, width\_road refers to the width of road or $X_3$, and access\_control refers to the control variable or $X_4$. We will use the variable's notation ($X_i$) and its name interchangeably.  
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=4in]{scatter_matrix.png}
+  		\caption{Scatter plot matrix.\label{figure1}
+}
+	\end{centering}
+\end{figure}
+
+Figure 1 shows the relationship between each variable. By analyzing the figure, it seems that aadt has relatively strong linear relationship with population, number of lanes, and access control. We could support our analysis by quantifying the correlation between each variable. The correlation is plotted in the covariance matrix figure below. 
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=3in]{covariance_matrix.png}
+  		\caption{Covariance matrix.\label{figure2}
+}
+	\end{centering}
+\end{figure}
+Suppose we set the correlation between the response variable and the predictor variable to be more than 0.6 or less than -0.6 for variables to have strong linear relationship. The correlation between aadt and population, number of lanes, and access control are 0.63, 0.77, and -0.69 respectively. Thus, the numbers have further supported our analysis that population, number of lanes, and access control might be suitable predictors for our linear regression model. On the other hand, the correlation between aadt and width of road is low, which is 0.12. This shows that width of road might not have a strong linear relationship with aadt, therefore, it might not be a suitable predictor to predict the average annual daily traffic. We shall validate these assumptions by building a linear regression model, analyze the model, and improve the model. 
+ 
+\section{Modelling Multiple Linear Regression}\label{methods}
+We fit the data to the following multiple linear regression model: 
+$$ y_i = \beta_0 + \beta_1 * x_{i,1} + \beta_2 * x_{i,2} + \beta_3 * x_{i,3} + \beta_4 * x_{i,4} $$
+,or we can rewrite it in the form of: 
+$$ Y = \beta_0 + \beta_1 * X_{1} + \beta_2 * X_{2} + \beta_3 * X_{3} + \beta_4 * X_{4} $$
+We obtained the following Ordinary Least Square (OLS) Regression result:
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=3in]{ols_result.png}
+  		\caption{OLS Regression result.\label{figure3}
+}
+	\end{centering}
+\end{figure}
+Thus, we are able to substitute in the values we have obtained by fitting the data to our model:
+$$ y_i = 2.118 * 10^{4} + 0.0330 * x_{i,1} + 9157.9390 * x_{i,2} + 100.2890 * x_{i,3} - 2.361 * 10^{4} * x_{i,4}$$ 
+
+\section{Adequacy Checking}
+
+\subsection{From the viewpoint of the fitted model}
+For this assignment, we will use the level of significance $\alpha = 0.05$. 
+
+\subsubsection{t-tests} \label{section311}
+In order to check the significance of the fitted parameters, we conduct t-tests. Using the level of significance $\alpha = 0.05$, the rejection region is when 
+$$|t^*| > t_{116, 0.025} = 1.981$$
+\begin{enumerate}\itemsep0pt
+\item $H_0 :\beta_0 = 0$. \\
+$H_1 : \beta_0 \neq 0$. \\
+The t-value for $\beta_0$ from the table above is 1.821, whereas its $Pr(>|t|)$ is 0.071. Since $|t^*| = 1.821 < 1.981 = t_{116, 0.025}$, thus we do not reject $H_0$.
+\item $H_0 : \beta_1 = 0$. \\
+$H_1 : \beta_1 \neq 0$. \\
+The t-value for $\beta_1$ from the table above is 7.017, whereas its $Pr(>|t|) < 0.005$. Since $|t^*| = 7.017 > 1.981 = t_{116, 0.025}$, thus we reject $H_0$.
+\item $H_0 : \beta_2 = 0$. \\
+$H_1 : \beta_2 \neq 0$. \\
+The t-value for $\beta_2$ from the table above is 5.983, whereas its $Pr(>|t|) < 0.005$. Since $|t^*| = 5.983 > 1.981 = t_{116, 0.025}$, thus we reject $H_0$. 
+\item $H_0 :\beta_3 = 0$. \\
+$H_1 : \beta_2 \neq 0$. \\
+The t-value for $\beta_3$ from the table above is 0.807, whereas its $Pr(>|t|)$ is 0.421. Since $|t^*| = 0.807 < 1.981 = t_{116, 0.025}$, thus we do not reject $H_0$. 
+\item $H_0 : \beta_4 = 0$. \\
+$H_1 : \beta_2 \neq 0$. \\
+The t-value for $\beta_4$ from the table above is -5.223, whereas its $Pr(>|t|) < 0.005$. Since $|t^*| = 5.223 > 1.981 = t_{116, 0.025}$, thus we reject $H_0$. 
+\end{enumerate}
+
+By the t-tests, we can conclude that $\beta_0$ and $\beta_3$ are not statistically different from 0. Furthermore, we show that $\beta_1$, $\beta_2$, and $\beta_4$ are statistically different from 0. 
+
+\subsubsection{F statistic}
+We use F test to test the significance of the multiple linear regression. We test the hypothesis: 
+$$ H_0: \beta_1 = \beta_2 = \beta_3 = \beta_4 = 0$$
+$$ H_1: at \thickspace least \thickspace one \thickspace \beta_i \neq 0$$
+From the OLS Regression result, we obtained the value of the F-statistic with the degree of freedom (4, 116) is 88.29. In other words, $F = 88.29$. It is bigger than $F_{4,116}^{0.05} = 2.45$. Therefore, since $F > F_{4,116}^{0.05}$, we reject the null hypothesis. \\
+
+Moreover, $p-value = 2.84 * 10^{-34} < 0.005$. The value of the F-statistic and the p-value show that the fitted parameters are significant to predict the response variable. In other words, there is a regression relation between the response variable $Y$ and the predictor variables $X_1, X_2, X_3, X_4$. 
+
+\subsubsection{R-squared}
+The value of the R-squared is 0.753 and the value of the adjusted R-squared is 0.744. Based on the given boundary of a good model's adjusted R-squared on the lecture slides ($0.6 < R_a < 0.95$), we can conclude that the fitted regression line is a good model because its adjusted R-squared is 0.744, which lies in the given boundary. This shows that 74.4\% of the total variation is explained by the regression. 
+
+\subsection{From the viewpoint of residuals}
+\subsubsection{Normality checking}
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{qq_plot.png}
+  		\caption{QQ-plot.\label{figure4}
+}
+	\end{centering}
+\end{figure}
+The QQ-plot shows that there is a little departure from the red line. This suggests that the error distribution is not normally distributed. More precisely, the distribution is skewed to the right.  
+
+\subsubsection{Checking for time effects}
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{residuals_time.png}
+  		\caption{Residuals against time.\label{figure5}
+}
+	\end{centering}
+\end{figure}
+The graph depicts no pattern in the data when the residuals are plotted against time. It suggests that the error terms are independent over time. 
+
+\subsubsection{Checking for the constancy of error variance}
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{residuals_fitted.png}
+  		\caption{Residuals against fitted values.\label{figure6}
+}
+	\end{centering}
+\end{figure}
+By looking at the residual plot, it exhibits systematic pattern: as the values tend to be bigger, the residuals tend to be bigger as well. Furthermore, it seems that the residuals form a quadratic curve, which implies that there might be polynomial of degree two included in the residuals. It suggests that the variance is not constant and indicates the need of a curvilinear regression function. \\
+
+In order to further support our analysis that the variance of the error terms is not constant, we can plot the residuals against each predictor variables and we obtained: 
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=4in]{residuals_predictor.png}
+  		\caption{Residuals against predictor variables.\label{figure7}
+}
+	\end{centering}
+\end{figure}
+
+The plots of residuals against population, number of lanes, and width of road show that the residuals tend to be bigger as the value of each predictor variable increases. On the other hand, the plot of residuals against access control shows that the residuals tend to be smaller as the value increases. These lead to the same conclusion as our previous analysis: the variance of the residuals is not constant. 
+
+\subsubsection{Checking for linearity}
+By analysing Figure \ref{figure4}, we also come to the conclusion that the assumption of linearity is violated. Furthermore, we have also seen that the error terms are not normally distributed and the variance of the error terms is not constant. Thus, there should be some remedies to the existing model in order for the model to provide a more accurate prediction and depicts our data more precisely. We expect the aforementioned problems on the existing model to vanish.
+
+
+\subsection{Remedy Measures}
+We will do remedy for the fitted regression line so that it will be an appropriate model for our data. We will try two methods, the first one is by analyzing our graphs and the second one is Box-Cox method
+
+\subsubsection{Taking square root of y}
+Previously, figure \ref{figure6} indicates the need of a curvilinear regression function. This suggest that we can try the transformation $\sqrt{y}$. Thus, the transformed model is as follows: 
+
+$$ \sqrt{y_i} = \beta_0 + \beta_1 * x_{i,1} + \beta_2 * x_{i,2} + \beta_3 * x_{i,3} + \beta_4 * x_{i,4} $$
+,or we can rewrite it in the form of: 
+$$ \sqrt{Y} = \beta_0 + \beta_1 * X_{1} + \beta_2 * X_{2} + \beta_3 * X_{3} + \beta_4 * X_{4} $$
+
+We fit our data to the this model and obtained the following result: 
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=3in]{ols_result_trans.png}
+  		\caption{OLS Regression result of the transformed data.\label{figure8}
+}
+	\end{centering}
+\end{figure}
+
+By transforming Y to $\sqrt{Y}$, we obtained a higher value for the adjusted R-squared, which is 85.2\%. Furthermore, by conducting similar t-tests, we can see that $\beta_3$ is not statistically different from 0. We also plot the residuals in the QQ-plot and obtained a much better result: there is only a little departure from the red line. The new QQ-plot suggests that the residuals are approximately normally distributed. 
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{qq_plot_trans.png}
+  		\caption{QQ-plot of the transformed data.\label{figure9}
+}
+	\end{centering}
+\end{figure}
+
+Next, we shall see the residual plot for the newly transformed $Y$ and check whether the residuals' variance are constant or not.
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{residuals_fitted_trans.png}
+  		\caption{Residual against fitted values plot of the transformed data.\label{figure10}
+}
+	\end{centering}
+\end{figure}
+
+The plot above indicates that now, the residuals have constant variance.
+
+\subsubsection{Box-Cox Transformation}
+From the section about adequacy checking, we observed that the model is not linear, error terms are not normally distributed, and the variance of the residuals is not constant. Another way to overcome these violation is by transforming via Box-Cox transformation. \\ 
+
+Assuming $Y$ is a random variable from some distribution that may depend on the predictor variables and $Y$ takes on only positive values, the Box-Cox transformation model is defined as: 
+$$Y^* = \frac{Y^\lambda-1}{\lambda},\thickspace \thickspace \lambda \neq 0$$
+
+In Box-Cox tranformation, we must find $\hat{\lambda}$ that maximizes the likelihood estimator of $\lambda$. The graph below shows how the log-likelihood when $\lambda$ varies. 
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{boxcox_graph.png}
+  		\caption{Box-Cox Log-likelihood against lambda.\label{boxcox}
+}
+	\end{centering}
+\end{figure}
+
+And we tabulate $\lambda$ and its corresponding log-likelihood in the table below. Notice that the values of log-likelihood are sorted in a descending manner. 
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{boxcox_lambda.png}
+  		\caption{Box-Cox Lambda Table.\label{boxcox_lambda}
+}
+	\end{centering}
+\end{figure}
+
+We see that $\lambda$ that maximizes log-likelihood is $\lambda = 0.2626263$. Thus, we try to fit our data to the following model: 
+$$ \frac{Y^\lambda-1}{\lambda} = \beta_0 + \beta_1 * X_{1} + \beta_2 * X_{2} + \beta_3 * X_{3} + \beta_4 * X_{4}$$
+$$where \thickspace \lambda=0.2626263 $$
+
+And we obtained the following result: 
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=3in]{boxcox_ols_result.png}
+  		\caption{Box-Cox OLS Regression result.\label{boxcox_ols}
+}
+	\end{centering}
+\end{figure}
+
+The adjusted R-squared is lower than what we have obtained by transforming $Y$ to $\sqrt{Y}$. \\
+Furthermore, we again plot the residuals in the QQ-plot and observe that the blue dots approximately follow the red line. As compared to the QQ-plot of the $\sqrt{Y}$, this QQ-plot provides a better result. The new QQ-plot suggests that the residuals are almost normally distributed. 
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{boxcox_qq.png}
+  		\caption{Box-Cox QQ-plot.\label{boxcox_qq}
+}
+	\end{centering}
+\end{figure}
+
+Next, we observe the residual plot for the newly transformed $Y$ and check whether the residuals' variance are constant or not.
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{boxcox_residuals.png}
+  		\caption{Box-Cox Residuals Plot.\label{boxcox_residuals}
+}
+	\end{centering}
+\end{figure}
+There is no systematic found in this graph and therefore the variance of the error terms is constant. \\
+
+\subsubsection{Comparison between the methods}
+In both methods, we obtained approximately normally distributed residuals and constant error variance. However, Box-Cox method produced lower adjusted R-squared (0.831), while the square root method produced higher adjusted R-squared (0.852). This difference suggests us to choose square root method over the Box-Cox method for this data. 
+
+\subsection{Check for sequential dependence or Autocorrelation}
+We will use Durbin Watson test to check the possible sequential dependence. The test statistic is: 
+$$d = \sum_{u=2}^{n} (e_u-e_{u-1})^2 / \sum_{u=1}^{n} e_u^2$$
+$H_0 : \rho = 0$ \\
+$H_1 : \rho > 0$ \\
+From the OLS Regression results above, $d = 1.583 < d_L$. Thus, we reject $H_0$ and conclude that there is positively serially correlated. It implies that there is little autocorrelation in the data. \\
+After we have conducted adequacy check for the newly transformed model, we see that the model is now appropriate to predict the response variable. 
+
+\subsection{Check for Multicollinearity with VIF}
+We aimed to check whether the predictor variables are correlated to each other, or in other words, multicollinearity is present in our data. A method that is widely accepted to detect multicollinearity is variance inflation factors or VIF (Kutner et al., 2011, p.408). We obtained the following result: 
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{vif.png}
+  		\caption{Variance Inflation Factors.\label{vif}
+}
+	\end{centering}
+\end{figure}
+
+As suggested by Kutner (2011, p.409), if the largest VIF values among all $X_i$ exceed 10, it is an indication that multicollinearity may be unduly influencing the least squares estimates. However, we observe in the VIF table above, the largest VIF is 8.6. Thus, multicollinearity may be present in our data but does not influence our least squares estimates severely. To conclude, we may ignore this and proceed with our transformed model. 
+
+
+\section{F-test for Reduced Model and Full Model}
+Previously on section \ref{section311}, we concluded that $\beta_3$ are not statistically significant from 0, thus it indicates that $X_3$ may not be a suitable predictor to predict aadt. This indicates that we shall reduce the model. The reduced model is denoted by $\omega$ and the full model is denoted by $\Omega$. 
+$$\omega: \sqrt{Y} =  \beta_0+\beta_1 X_1+\beta_2 X_2+ \beta4 X_4$$
+$$\Omega: \sqrt{Y} =  \beta_0+\beta_1 X_1+\beta_2 X_2+ \beta_3 X_3+\beta4 X_4$$
+
+By fitting the data to the reduced model, we obtained the following OLS regression result: 
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=3in]{ols_result_reduced.png}
+  		\caption{OLS Regression result of the reduced model. \label{figure11}
+}
+	\end{centering}
+\end{figure}
+
+Furthermore, we conduct F-test of $\omega$ against $\Omega$:
+$$ H_0: \beta_{q+1} = ... = \beta_{q+1} = 0$$ 
+$$ H_1: not \thickspace all \thickspace \beta_{j},q+1,...,p \thickspace equal \thickspace zero. $$
+
+The result is shown in the table below: 
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=3in]{ftest_omega.png}
+  		\caption{F-test for reduced model against full model. \label{ftest_omega}
+}
+	\end{centering}
+\end{figure}
+
+
+$F$ = 0.2731 < 3.92 = $F_{1,116}^{0.05}$. Since $F < F_{1,116}^{0.05}$, we do not reject hypothesis. This indicates that using the reduced model is sufficient and therefore the reduced model is significant. Moreover, it supports our previous analysis that $\beta_3$ is not statistically different from 0 and $X_3$ does not exhibit a strong linear relationship with our response variable. Thus, we should not include $X_3$ in our model. To conclude, the final model that is appropriate for predicting aadt is given by: 
+$$\sqrt{Y} =  \beta_0+\beta_1*X_1+\beta_2*X_2+\beta_4*X_4$$
+Following are the normal probability plot and the residual plot of our final model:
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{final_model_qq.png}
+  		\caption{QQ-plot of the final model. \label{final_qq}
+}
+	\end{centering}
+\end{figure}
+
+\begin{figure}[H]
+	\begin{centering}
+  		\includegraphics[width=2in]{final_model_residuals.png}
+  		\caption{Residuals against fitted values for final model plot. \label{final_residuals}
+}
+	\end{centering}
+\end{figure}
+
+
+\section{Prediction}
+We predict aadt from the data given in NTULearn by fitting the following data into our regression model: \\
+$X_1 = 50000$, $X_2 = 3$, $X_3 = 60$, $X_4 = 2$ \\
+
+\begin{enumerate}\itemsep0pt
+
+\item The 95\% confidence interval is given by: 
+
+    \begin{figure}[H]
+    	\begin{centering}
+      		\includegraphics[width=2in]{confidence_int.png}
+      		\caption{Confidence Interval. \label{figure12}
+    }
+    	\end{centering}
+    \end{figure}
+Notice that $Y$ in our regression model is $\sqrt{Y}$, thus the 95\% confidence interval is given by: 
+
+\begin{center}
+\begin{tabular}{ c c c }
+ fit & lwr & upr \\ 
+ 5442.02323 & 4307.08557 & 6709.53643
+\end{tabular}
+\end{center}
+
+Thus, with confidence coefficient 0.95, we estimate that the average annual daily traffic for a section of road or highway are between 4307 and 6710. We provide this confidence interval by taking into consideration population, number of lanes, and access control. It is when population equals to 50000, number of lanes equals to 3, and there is no access control. 
+
+\item The 95\% prediction interval is given by:
+
+\begin{figure}[H]
+    	\begin{centering}
+      		\includegraphics[width=2in]{prediction_int.png}
+      		\caption{Prediction Interval. \label{figure13}
+    }
+    	\end{centering}
+    \end{figure}
+\end{enumerate}
+
+Notice that $Y$ in our regression model is $\sqrt{Y}$, thus the 95\% prediction interval is given by: 
+\begin{center}
+\begin{tabular}{ c c c }
+ fit & lwr & upr \\ 
+ 5442.02323 & 66.29654 & 19431.77452
+\end{tabular}
+\end{center}
+Thus, with confidence coefficient 0.95, we estimate that the annual daily traffic for a section of road or highway are between 66 and 19432. We provide this confidence interval by taking into consideration population, number of lanes, and access control. It is when population equals to 50000, number of lanes equals to 3, and there is no access control. 
+
+\section{Appendix}
+
+This assignment is written in Python and R programming language. We use R programming language in section 5 only. \\
+Firstly, we all import important libraries and modules first. 
+\begin{lstlisting}[frame=trBL]
+#import all libraries
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+%matplotlib inline
+from sklearn.linear_model import LinearRegression
+from pandas.plotting import scatter_matrix
+from sklearn.metrics import mean_squared_error
+\end{lstlisting}
+
+Next, we import the data and modify the data frame so that the data frame is suitable to be fitted into our regression model. 
+
+\begin{lstlisting}[frame=trBL]
+df = pd.read_fwf('aadt.txt', header = None)
+df.columns = ["aadt", "population", "num_lanes", \
+        "width_road", "access_control", "others_1", \
+        "others_2", "others_3"]
+del df['others_1']
+del df['others_2']
+del df['others_2']
+df.head()
+\end{lstlisting}
+
+The output is:
+\begin{figure}[H]
+    	\begin{centering}
+      		\includegraphics[width=3in]{df_head.png}
+      		\caption{df.head() output. \label{fig: floatfigure}
+    }
+    	\end{centering}
+\end{figure}
+
+The code for figure \ref{figure1}: 
+\begin{lstlisting}[frame=trBL]
+scatter_matrix(df, alpha=1, figsize=(12, 12), \
+            diagonal='kde') 
+\end{lstlisting}
+
+The code for figure \ref{figure2}:
+\begin{lstlisting}[frame=trBL]
+from sklearn.preprocessing import StandardScaler 
+stdsc = StandardScaler() 
+X_std = stdsc.fit_transform(df[cols].iloc[:,range(0,5)] \
+        .values)
+cov_mat = np.cov(X_std.T)
+plt.figure(figsize=(10,10))
+sns.set(font_scale=1.5)
+hm = sns.heatmap(cov_mat,
+                 cbar=True,
+                 annot=True,
+                 square=True,
+                 fmt='.2f',
+                 annot_kws={'size': 12},
+                 cmap='coolwarm',                 
+                 yticklabels=cols,
+                 xticklabels=cols)
+plt.title('Covariance matrix showing correlation \ 
+            coefficients', size = 18)
+plt.tight_layout()
+plt.show()
+\end{lstlisting}
+
+The code for figure \ref{figure3}: 
+\begin{lstlisting}[frame=trBL]
+model = smf.ols("aadt ~ population + num_lanes \ 
+        + width_road + access_control", data = df).fit()
+model.summary()
+\end{lstlisting}
+
+Multiple Linear Regression model:
+\begin{lstlisting}[frame=trBL]
+x = df[['population', 'num_lanes', 'width_road', \ 
+    'access_control']]
+y = df['aadt']
+lm = LinearRegression()
+lm.fit(x,y)
+lm.intercept_
+lm.coef_
+yhat = lm.predict(x)
+\end{lstlisting}
+
+The code for figure \ref{figure4}:
+\begin{lstlisting}[frame=trBL]
+res = model.resid
+fig = sm.qqplot(res, fit = True, line = '45')
+plt.show()
+\end{lstlisting}
+
+The code for figure \ref{figure5} and \ref{figure6} is written in R programming language:
+\begin{lstlisting}[frame=trBL, language = R]
+raw <- read.table('Desktop/anaconda_files/aadt.txt',
+        header=FALSE)
+df <- data.frame(y=raw$V1,x1=raw$V2,x2=raw$V3,x3=raw$V4, 
+        x4=raw$V5)
+mlr2 <- lm(y ~ x1+x2+x3+x4, data=df)
+plot(residuals(mlr2),ylab='Residuals',xlab='Time')
+plot(residuals(mlr2),fitted(mlr2),ylab='Residuals'
+    ,xlab='Fitted values')
+\end{lstlisting}
+
+The code for figure \ref{figure7}:
+\begin{lstlisting}[frame=trBL]
+# residual plot
+fig, axs = plt.subplots(2,2, figsize =(20,20))
+
+sns.residplot(df['population'], df['aadt'], \ 
+                ax = axs[0,0])
+sns.residplot(df['num_lanes'], df['aadt'], \ 
+                ax = axs[0,1])
+sns.residplot(df['width_road'], df['aadt'], \ 
+                ax = axs[1,0])
+sns.residplot(df['access_control'], df['aadt'], \ 
+                ax = axs[1,1])
+
+axs[0,0].set(ylabel = 'Residuals')
+axs[0,1].set(ylabel = 'Residuals')
+axs[1,0].set(ylabel = 'Residuals')
+axs[1,1].set(ylabel = 'Residuals')
+
+plt.show()
+\end{lstlisting}
+
+The code for figure \ref{figure8}:
+\begin{lstlisting}[frame=trBL]
+tr_model = smf.ols("np.sqrt(aadt) ~ population + \ 
+            num_lanes + width_road + access_control", \ 
+            data = df).fit()
+tr_model.summary()
+\end{lstlisting}
+
+The code for figure \ref{figure9}:
+\begin{lstlisting}[frame=trBL]
+res = tr_model.resid
+fig = sm.qqplot(res, fit = True, line = '45')
+plt.show()
+\end{lstlisting}
+
+The code for figure \ref{figure10} is written in R programming language:
+\begin{lstlisting}[frame=trBL, language = R]
+mlr3 <- lm(sqrt(y) ~ x1+x2+x3+x4, data=df)
+plot(residuals(mlr3),fitted(mlr3),ylab='Residuals'
+     ,xlab='Fitted values')
+\end{lstlisting}
+
+The code for figure \ref{boxcox} and \ref{boxcox_lambda} is written in R programming language:
+\begin{lstlisting}[frame=trBL, language = R]
+library(MASS)
+b <- boxcox(y ~ x1+x2+x3+x4, data = df)
+lambda <- b$x
+lik <- b$y
+bc <- cbind(lambda, lik)
+sorted_bc <- bc[order(-lik),]
+head(sorted_bc, n = 10)
+\end{lstlisting}
+
+The code for figure \ref{boxcox_ols}:
+\begin{lstlisting}[frame=trBL]
+b_tr_model = smf.ols("np.true_divide((np.power(aadt, \ 
+            0.2626263)-1), 0.262626263) ~ population \ 
+            + num_lanes + width_road + access_control", \ 
+            data = df).fit()
+b_tr_model.summary()
+\end{lstlisting}
+
+The code for figure \ref{boxcox_qq}:
+\begin{lstlisting}[frame=trBL]
+res = b_tr_model.resid
+fig = sm.qqplot(res, fit = True, line = '45')
+plt.show()
+\end{lstlisting}
+
+The code for figure \ref{boxcox_residuals} is written in R programming language:
+\begin{lstlisting}[frame=trBL]
+mlr4 <- lm((y^0.2626263 - 1)/0.2626263 ~ x1+x2+x3+x4, 
+            data=df)
+plot(residuals(mlr4),fitted(mlr4),ylab='Residuals'
+     ,xlab='Fitted values')
+\end{lstlisting}
+
+The code for figure \ref{vif}:
+\begin{lstlisting}[frame=trBL]
+from patsy import dmatrices
+from statsmodels.stats.outliers_influence \ 
+        import variance_inflation_factor
+vif = pd.DataFrame()
+vif["VIF Factor"] = [variance_inflation_factor \
+                    (x.values, i) for i in \ 
+                    range(x.shape[1])]
+vif["features"] = x.columns
+vif.round(1)
+\end{lstlisting}
+
+The code for figure \ref{figure11}:
+\begin{lstlisting}[frame=trBL]
+reduced_model = smf.ols("np.sqrt(aadt) ~ population \ 
+                + num_lanes + access_control", \ 
+                data = df).fit()
+reduced_model.summary()
+\end{lstlisting}
+
+The code for figure \ref{ftest_omega} is written in R programming language:
+\begin{lstlisting}[frame=trBL, language = R]
+mlr1 <- lm(sqrt(y) ~ x1+x2+x4, data=df)
+mlr <- lm(sqrt(y) ~ x1+x2+x3+x4, data=df)
+anova(mlr1,mlr)
+\end{lstlisting}
+
+The code for figure \ref{final_qq}:
+\begin{lstlisting}[frame=trBL]
+res = reduced_model.resid
+fig = sm.qqplot(res, fit = True, line = '45')
+plt.show()
+\end{lstlisting}
+
+The code for figure \ref{final_residuals} is written in R programming language:
+\begin{lstlisting}[frame=trBL, language = R]
+plot(residuals(mlr1),fitted(mlr1),ylab='Residuals'
+     ,xlab='Fitted values')
+\end{lstlisting}
+
+The code for figure \ref{figure12} and \ref{figure13} is written in R programming language:
+\begin{lstlisting}[frame=trBL, language = R]
+con <- data.frame(x1=50000,x2=3,x4=2)
+predict(mlr1,con,interval='confidence',level=0.95)
+predict(mlr1,con,interval='prediction',level=0.95)
+\end{lstlisting}
+
+\section{References}
+Kutner, Neter, Nachtsheim, Wasserman. (2005). \textit{Applied Linear Statistical Models}. New York: McGraw-Hill Education.   \\ \\
+
+\url{https://www.rdocumentation.org/packages/EnvStats/versions/2.3.1/topics/boxcox}
+
+\end{document}
