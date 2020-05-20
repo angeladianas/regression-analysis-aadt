@@ -1,6 +1,10 @@
+raw <− read.table ( ’Desktop/anaconda_files/aadt.txt’ , header=FALSE)
+df <− data.frame(y=raw$V1, x1=raw$V2, x2=raw$V3, x3=raw$V4, x4=raw$V5)
+mlr2 <− lm(y ∼ x1+x2+x3+x4, data=df ) plot(residuals(mlr2),ylab=’Residuals ’, xlab=’Time’) 
+plot(residuals(mlr2),fitted(mlr2),ylab=’Residuals ’,xlab=’Fitted values ’)
+
 mlr3 <- lm(sqrt(y) ~ x1+x2+x3+x4, data=df)
-plot(residuals(mlr3),fitted(mlr3),ylab='Residuals'
-     ,xlab='Fitted values')
+plot(residuals(mlr3),fitted(mlr3),ylab='Residuals', xlab='Fitted values')
 
 library(MASS)
 b <- boxcox(y ~ x1+x2+x3+x4, data = df)
